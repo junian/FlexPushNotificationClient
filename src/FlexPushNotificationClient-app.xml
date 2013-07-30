@@ -15,7 +15,7 @@
 
 	<!-- A universally unique application identifier. Must be unique across all AIR applications.
 	Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-	<id>FlexPushNotificationClient</id>
+	<id>net.junian.FlexPushNotificationClient</id>
 
 	<!-- Used as the filename for the application. Required. -->
 	<filename>FlexPushNotificationClient</filename>
@@ -238,6 +238,29 @@
 			    <!--Removing the permission android.permission.INTERNET will have the side effect
 					of preventing you from debugging your application on your device-->
 			    <uses-permission android:name="android.permission.INTERNET"/>
+			    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+			    <permission android:name="air.net.junian.FlexPushNotificationClient.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+			    <uses-permission android:name="air.net.junian.FlexPushNotificationClient.permission.C2D_MESSAGE" />
+			    
+			    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+		
+		        <receiver android:name="com.freshplanet.nativeExtensions.C2DMBroadcastReceiver"
+		            android:permission="com.google.android.c2dm.permission.SEND">
+		
+		            <intent-filter>
+		                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+		                <category android:name="air.net.junian.FlexPushNotificationClient" />
+		            </intent-filter>
+		
+		            <intent-filter>
+		                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+		                <category android:name="air.net.junian.FlexPushNotificationClient" />
+		            </intent-filter>
+		        </receiver>
+		
+		        <service android:name="com.freshplanet.nativeExtensions.LocalNotificationService"/>
+		        <receiver android:name="com.freshplanet.nativeExtensions.LocalBroadcastReceiver" android:process=":remote"></receiver>
+		        
 			    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
 			    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE"/>-->
 			    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>-->
@@ -265,4 +288,7 @@
 		]]></InfoAdditions>
         <requestedDisplayResolution>high</requestedDisplayResolution>
     </iPhone>
+<extensions>
+        <extensionID>com.freshplanet.AirPushNotification</extensionID>
+    </extensions>
 </application>

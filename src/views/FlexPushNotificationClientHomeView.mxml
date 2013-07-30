@@ -1,7 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="HomeView">
+		xmlns:s="library://ns.adobe.com/flex/spark" title="HomeView" initialize="HomeView_initializeHandler(event)">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.freshplanet.nativeExtensions.PushNotification;
+			import com.freshplanet.nativeExtensions.PushNotificationEvent;
+			
+			import mx.events.FlexEvent;
+			private var GOOGLE_PROJECT_ID:String = "13333289846";
+			
+			
+			private function init():void
+			{
+				//trace("is push notif is supported? " + PushNotification.getInstance().isPushNotificationSupported);
+				
+				
+				PushNotification.getInstance().registerForPushNotification(GOOGLE_PROJECT_ID);
+				PushNotification.getInstance().addEventListener(PushNotificationEvent.PERMISSION_GIVEN_WITH_TOKEN_EVENT, onPermissionGiven);
+				PushNotification.getInstance().addEventListener(PushNotificationEvent.PERMISSION_REFUSED_EVENT, onPermissionRefused);
+			
+				
+			}
+			
+			private function onPermissionGiven(e:PushNotificationEvent):void
+			{
+				trace("permission granted");
+			}
+			
+			private function onPermissionRefused(e:PushNotificationEvent):void
+			{
+				trace("permission denied");
+			}
+			
+			protected function HomeView_initializeHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				init();				
+			}
+			
+		]]>
+	</fx:Script>
 </s:View>
