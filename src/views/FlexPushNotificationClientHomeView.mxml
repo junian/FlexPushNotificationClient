@@ -46,17 +46,19 @@
 					log.appendText("error message:" + e.errorMessage + "\n");
 					
 					// GCMをサーバに送信
-					/*var req:URLRequest = new URLRequest("http://myserver.com/user/register");
+					var req:URLRequest = new URLRequest("http://gcmphpserver.junian.c9.io/hello/register.php");
 					var url_vars:URLVariables = new URLVariables();
-					url_vars.registration_id = e.token;
-					url_vars.name = "nodera";
+					url_vars.name = "junian";
+					url_vars.email = "junian@square-enix-smileworks.com";
+					url_vars.regId = e.token;
+					
 					req.data = url_vars;
 					req.method = URLRequestMethod.POST;
 					
 					var loader:URLLoader = new URLLoader();
-					loader.dataFormat = URLLoaderDataFormat.VARIABLES;
+					loader.dataFormat = URLLoaderDataFormat.TEXT;
 					loader.addEventListener(Event.COMPLETE, onLoadComplete);
-					loader.load(req);*/
+					loader.load(req);
 				}
 				
 				private function onCommingNotification(e:PushNotificationEvent):void {
