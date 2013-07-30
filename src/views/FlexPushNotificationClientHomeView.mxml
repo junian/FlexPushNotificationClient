@@ -1,46 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="HomeView" initialize="HomeView_initializeHandler(event)">
+		xmlns:s="library://ns.adobe.com/flex/spark" title="HomeView" addedToStage="initMe()">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
-			import com.freshplanet.nativeExtensions.PushNotification;
-			import com.freshplanet.nativeExtensions.PushNotificationEvent;
 			
-			import mx.events.FlexEvent;
-			private var GOOGLE_PROJECT_ID:String = "13333289846";
-			
-			
-			private function init():void
-			{
-				//trace("is push notif is supported? " + PushNotification.getInstance().isPushNotificationSupported);
+				import com.freshplanet.nativeExtensions.PushNotification;
+				import com.freshplanet.nativeExtensions.PushNotificationEvent;
 				
+				import flash.display.MovieClip;
+				import flash.events.Event;
+				import flash.events.MouseEvent;
+				import flash.net.URLLoader;
+				import flash.net.URLLoaderDataFormat;
+				import flash.net.URLRequest;
+				import flash.net.URLRequestMethod;
+				import flash.net.URLVariables;
 				
-				PushNotification.getInstance().registerForPushNotification(GOOGLE_PROJECT_ID);
-				PushNotification.getInstance().addEventListener(PushNotificationEvent.PERMISSION_GIVEN_WITH_TOKEN_EVENT, onPermissionGiven);
-				PushNotification.getInstance().addEventListener(PushNotificationEvent.PERMISSION_REFUSED_EVENT, onPermissionRefused);
-			
+				private const GOOGLE_PROJECT_ID:String = "13333289846";
+				private var notification:PushNotification;
 				
-			}
-			
-			private function onPermissionGiven(e:PushNotificationEvent):void
-			{
-				trace("permission granted");
-			}
-			
-			private function onPermissionRefused(e:PushNotificationEvent):void
-			{
-				trace("permission denied");
-			}
-			
-			protected function HomeView_initializeHandler(event:FlexEvent):void
-			{
-				// TODO Auto-generated method stub
-				init();				
-			}
+				public function initMe():void {
+					log.appendText("begin...");
+					notification = PushNotification.getInstance();
+					notification.addEventListener(PushNotificationEvent.PERMISSION_GIVEN_WITH_TOKEN_EVENT, onGivenToken, false, 0, true);
+					notification.addEventListener(PushNotificationEvent.COMING_FROM_NOTIFICATION_EVENT, onCommingNotification, false, 0, true);
+					notification.addEventListener(PushNotificationEvent.PERMISSION_REFUSED_EVENT, onPermissionRefused, false, 0, true);
+					onClickRegisterBtn(null);
+					register_btn.addEventListener(MouseEvent.CLICK, onClickRegisterBtn);
+				}
+				
+				private function onClickRegisterBtn(e:MouseEvent):void {
+					notification.registerForPushNotification(GOOGLE_PROJECT_ID);
+					log.appendText("registering...");
+				}
+				
+				private function onGivenToken (e:PushNotificationEvent):void {
+					trace(onGivenToken);
+					trace(e.token, e.errorCode, e.errorMessage);
+					
+					log.appendText("token:" + e.token + "\n");
+					log.appendText("error code:" + e.errorCode + "\n");
+					log.appendText("error message:" + e.errorMessage + "\n");
+					
+					// GCMをサーバに送信
+					/*var req:URLRequest = new URLRequest("http://myserver.com/user/register");
+					var url_vars:URLVariables = new URLVariables();
+					url_vars.registration_id = e.token;
+					url_vars.name = "nodera";
+					req.data = url_vars;
+					req.method = URLRequestMethod.POST;
+					
+					var loader:URLLoader = new URLLoader();
+					loader.dataFormat = URLLoaderDataFormat.VARIABLES;
+					loader.addEventListener(Event.COMPLETE, onLoadComplete);
+					loader.load(req);*/
+				}
+				
+				private function onCommingNotification(e:PushNotificationEvent):void {
+					log.appendText("onCommingNotification\n");
+				}
+				
+				private function onPermissionRefused(e:PushNotificationEvent):void {
+					log.appendText("onPermissionRefused");
+				}
+				
+				private function onLoadComplete(e:Event):void
+				{
+					log.appendText("\n complete send.");
+					log.appendText(e.target.data);
+				}
 			
 		]]>
 	</fx:Script>
+	<s:Button id="register_btn" width="50" height="50">
+		
+	</s:Button>
+	<s:TextArea id="log" height="300" width="100%">
+		
+	</s:TextArea>
 </s:View>
+

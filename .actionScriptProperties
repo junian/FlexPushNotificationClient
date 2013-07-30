@@ -45,7 +45,9 @@
       <multiPlatformSettings enabled="true" includePlatformLibs="false" platformID="com.adobe.flexide.multiplatform.ios.platform" version="2"/>
       <airSettings airCertificatePath="" airTimestamp="true" anePathSet="true" version="1">
         <airExcludes/>
-        <anePaths/>
+        <anePaths>
+          <anePathEntry path="/Users/a/Projects/bitbucket/FlexPushNotificationClient/libs/AirPushNotification.ane"/>
+        </anePaths>
       </airSettings>
       <actionScriptSettings version="1"/>
     </buildTarget>
