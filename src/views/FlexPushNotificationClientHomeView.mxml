@@ -28,8 +28,8 @@
 					notification.addEventListener(PushNotificationEvent.PERMISSION_GIVEN_WITH_TOKEN_EVENT, onGivenToken, false, 0, true);
 					notification.addEventListener(PushNotificationEvent.COMING_FROM_NOTIFICATION_EVENT, onCommingNotification, false, 0, true);
 					notification.addEventListener(PushNotificationEvent.PERMISSION_REFUSED_EVENT, onPermissionRefused, false, 0, true);
-					onClickRegisterBtn(null);
-					register_btn.addEventListener(MouseEvent.CLICK, onClickRegisterBtn);
+					//onClickRegisterBtn(null);
+					btn.addEventListener(MouseEvent.CLICK, onClickRegisterBtn);
 				}
 				
 				private function onClickRegisterBtn(e:MouseEvent):void {
@@ -48,8 +48,8 @@
 					// GCMをサーバに送信
 					var req:URLRequest = new URLRequest("http://gcmphpserver.junian.c9.io/hello/register.php");
 					var url_vars:URLVariables = new URLVariables();
-					url_vars.name = "junian";
-					url_vars.email = "junian@square-enix-smileworks.com";
+					url_vars.name = nama.text;
+					url_vars.email = email.text;
 					url_vars.regId = e.token;
 					
 					req.data = url_vars;
@@ -63,6 +63,9 @@
 				
 				private function onCommingNotification(e:PushNotificationEvent):void {
 					log.appendText("onCommingNotification\n");
+					log.appendText("token:" + e.token + "\n");
+					log.appendText("error code:" + e.errorCode + "\n");
+					log.appendText("error message:" + e.errorMessage + "\n");
 				}
 				
 				private function onPermissionRefused(e:PushNotificationEvent):void {
@@ -71,17 +74,17 @@
 				
 				private function onLoadComplete(e:Event):void
 				{
-					log.appendText("\n complete send.");
+					log.appendText("\ncomplete send.\n");
 					log.appendText(e.target.data);
 				}
 			
 		]]>
 	</fx:Script>
-	<s:Button id="register_btn" width="50" height="50">
-		
-	</s:Button>
-	<s:TextArea id="log" height="300" width="100%">
-		
-	</s:TextArea>
+	<s:VGroup width="100%" height="100%">
+		<s:TextInput id="nama" prompt="username" />
+		<s:TextInput id="email" prompt="email" />
+		<s:Button label="Register" id="btn" />
+		<s:TextArea id="log" height="100%" />
+	</s:VGroup>
 </s:View>
 
